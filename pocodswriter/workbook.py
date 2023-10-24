@@ -26,6 +26,20 @@ class Workbook:
         self.formats[frozen_props] = format
         return format
 
+    def _generate_hyperlink_et(self, p_element_et, cell_data):
+        url = cell_data["url"]
+        if url.startswith('internal:'):
+            url = url.replace('internal:', "#").replace('!', '.')
+        a_element = ET.SubElement(
+            p_element_et,
+            "text:a",
+            {
+                "xlink:href": url,
+                "xlink:type": "simple"
+            }
+        )
+        a_element.text = str(cell_data["data"])
+
     def _generate_table_cell_et(self, table_row_et, cell_data):
         props = {"office:value-type": "string", "calcext:value-type": "string"}
         _format = cell_data["format"]
@@ -38,18 +52,7 @@ class Workbook:
         )
         if "url" in cell_data:
             p_element = ET.SubElement(table_cell, "text:p")
-            url = cell_data["url"]
-            if url.startswith('internal:'):
-                url = url.replace('internal:', "#").replace('!', '.')
-            a_element = ET.SubElement(
-                p_element,
-                "text:a",
-                {
-                    "xlink:href": url,
-                    "xlink:type": "simple"
-                }
-            )
-            a_element.text = str(cell_data["data"])
+            self._generate_hyperlink_et(p_element, cell_data)
         else:
             for paragraph in str(cell_data["data"]).split('\n'):
                 p_element = ET.SubElement(table_cell, "text:p")
