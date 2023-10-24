@@ -123,32 +123,32 @@ class Workbook:
         return "\n".join(tags)
 
     def _generate_content_xml(self, template_file_content):
-        formats_xml = ""
-        sheets_xml = ""
-        tables_xml = ""
-        column_width_defs_xml = ""
+        formats_xml = []
+        sheets_xml = []
+        tables_xml = []
+        column_width_defs_xml = []
 
         for _format in self.formats.values():
-            formats_xml += _format.to_xml()
+            formats_xml.append(_format.to_xml())
 
         for ws_index, ws in enumerate(self.worksheets):
             worksheet = ws["worksheet"]
             sheet_et = self._generate_sheet_et(
                 ws["name"], ws_index, worksheet.data_as_jagged_array(), worksheet.get_number_of_columns()
             )
-            sheets_xml += ET.tostring(sheet_et, encoding="unicode")
+            sheets_xml.append(ET.tostring(sheet_et, encoding="unicode"))
 
             for table in worksheet.tables:
                 table_et = self._generate_table_et(ws["name"], table)
-                tables_xml += ET.tostring(table_et, encoding="unicode")
+                tables_xml.append(ET.tostring(table_et, encoding="unicode"))
 
-            column_width_defs_xml += self._generate_column_width_defs(ws_index, ws["worksheet"])
+            column_width_defs_xml.append(self._generate_column_width_defs(ws_index, ws["worksheet"]))
 
         return template_file_content.format(
-            formats=formats_xml,
-            sheets=sheets_xml,
-            tables=tables_xml,
-            column_width_defs=column_width_defs_xml,
+            formats=''.join(formats_xml),
+            sheets=''.join(sheets_xml),
+            tables=''.join(tables_xml),
+            column_width_defs=''.join(column_width_defs_xml),
         )
 
     def close(self):
