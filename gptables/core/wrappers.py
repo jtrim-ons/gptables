@@ -5,8 +5,8 @@ import pandas as pd
 import numpy as np
 from copy import deepcopy
 
-from xlsxwriter.workbook import Workbook
-from xlsxwriter.worksheet import Worksheet
+from pocodswriter.workbook import Workbook
+from pocodswriter.worksheet import Worksheet
 
 from gptables.core.cover import Cover
 

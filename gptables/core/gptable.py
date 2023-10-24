@@ -1,6 +1,6 @@
 import pandas as pd
 import re
-from xlsxwriter.format import Format
+from pocodswriter.format import Format
 
 class GPTable:
     """

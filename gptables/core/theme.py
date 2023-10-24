@@ -1,4 +1,4 @@
-from xlsxwriter.format import Format
+from pocodswriter.format import Format
 from gptables.core.gptable import GPTable
 import yaml
 from functools import wraps
@@ -370,4 +370,3 @@ class Theme:
                 getattr(self, attr) == getattr(other, attr)
                 for attr in obj_attr
                 ])
-        
